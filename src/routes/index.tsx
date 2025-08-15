@@ -52,7 +52,7 @@ export default function Home() {
 	return (
 		<main class={styles.chat}>
 			<Title>Hello World</Title>
-			<header class="chat">
+			<header>
 				<h1> Convex Chat</h1>
 				<p>
 					Connected as <strong>{name()}</strong>

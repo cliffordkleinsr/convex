@@ -1,5 +1,10 @@
 import { api, internal } from "./_generated/api";
-import { internalAction, mutation, query } from "./_generated/server";
+import {
+	internalAction,
+	internalMutation,
+	mutation,
+	query,
+} from "./_generated/server";
 import { v } from "convex/values";
 
 export const sendMessage = mutation({
@@ -46,6 +51,39 @@ export const getWikipediaSummary = internalAction({
 			user: "Wikipedea",
 			body: summary,
 		});
+	},
+});
+
+export const sendImage = mutation({
+	args: {
+		storageId: v.id("_storage"),
+		author: v.string(),
+	},
+	handler: async function (ctx, args) {
+		await ctx.db.insert("gallery", {
+			storageId: args.storageId,
+			author: args.author,
+			format: "image",
+		});
+	},
+});
+
+export const generateUploadUrl = mutation({
+	handler: async (ctx) => {
+		return await ctx.storage.generateUploadUrl();
+	},
+});
+
+export const fetchGallery = query({
+	args: {},
+	handler: async function (ctx, args) {
+		const gallery = await ctx.db.query("gallery").collect();
+		return Promise.all(
+			gallery.map(async (image) => ({
+				...image,
+				url: await ctx.storage.getUrl(image.storageId),
+			})),
+		);
 	},
 });
 function getSummaryFromJSON(data: any) {
