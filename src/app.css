@@ -14,6 +14,8 @@ body {
 	font-family: "Geist Sans", sans-serif;
 	height: 100%;
 	font-size: clamp(smaller, medium, large);
+	background: #111827;
+	color: white;
 }
 a {
 	color: inherit;

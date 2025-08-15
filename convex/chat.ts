@@ -13,16 +13,16 @@ export const sendMessage = mutation({
 		body: v.string(),
 	},
 	handler: async (ctx, args) => {
-		await ctx.db.insert("messages", {
-			user: args.user,
-			body: args.body,
-		});
-
 		if (args.body.startsWith("/wiki")) {
 			// Get the string after the first space
 			const topic = args.body.slice(args.body.indexOf(" ") + 1);
 			await ctx.scheduler.runAfter(0, internal.chat.getWikipediaSummary, {
 				topic,
+			});
+		} else {
+			await ctx.db.insert("messages", {
+				user: args.user,
+				body: args.body,
 			});
 		}
 	},
@@ -77,13 +77,35 @@ export const generateUploadUrl = mutation({
 export const fetchGallery = query({
 	args: {},
 	handler: async function (ctx, args) {
-		const gallery = await ctx.db.query("gallery").collect();
+		const gallery = await ctx.db.query("gallery").order("desc").collect();
 		return Promise.all(
 			gallery.map(async (image) => ({
 				...image,
 				url: await ctx.storage.getUrl(image.storageId),
-			})),
+			})).reverse(),
 		);
+	},
+});
+
+export const deleteImgId = mutation({
+	args: {
+		storageId: v.id("_storage"),
+		id: v.id("gallery"),
+	},
+	handler: async function (ctx, args) {
+		await ctx.storage.delete(args.storageId);
+		await ctx.runMutation(internal.chat.removeImageRef, {
+			id: args.id,
+		});
+	},
+});
+
+export const removeImageRef = internalMutation({
+	args: {
+		id: v.id("gallery"),
+	},
+	handler: async function (ctx, args) {
+		return await ctx.db.delete(args.id);
 	},
 });
 function getSummaryFromJSON(data: any) {

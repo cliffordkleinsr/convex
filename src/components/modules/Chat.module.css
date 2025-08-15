@@ -30,7 +30,6 @@
 button {
 	cursor: pointer;
 }
-
 .chat header {
 	position: fixed;
 	top: 0;
@@ -47,6 +46,20 @@ button {
 	color: white;
 	text-align: center;
 	height: 75px;
+
+	> div {
+		display: flex;
+		margin-left: auto;
+		padding: 0 5ch;
+		gap: 10px;
+		> a {
+			color: var(--tertiary-tex);
+			&:hover {
+				text-decoration: underline;
+				text-decoration-color: var(--tertiary-text);
+			}
+		}
+	}
 }
 
 .chat header::before,
@@ -129,13 +142,13 @@ button {
 	font-weight: 500;
 	margin: 0;
 	padding: 0;
-	width: 20px;
+	width: 100px;
 	border-radius: 0;
 }
 
 .chat article {
 	display: grid;
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: repeat(1, minmax(1fr, 0));
 	margin: 24px auto;
 	max-width: 380px;
 	padding-left: 16px;
@@ -163,6 +176,10 @@ button {
 	}
 }
 
+.chat section {
+	margin: 7ch auto;
+	/* border: 1px dashed red; */
+}
 .chat article div {
 	font-weight: 500;
 	color: var(--primary-text);
@@ -212,7 +229,7 @@ button {
 	bottom: 8px;
 	left: 8px;
 	width: calc(100% - 16px);
-	height: 72px;
+	height: 60px;
 	box-shadow:
 		0 20px 25px -5px rgb(0 0 0 / 0.1),
 		0 8px 10px -6px rgb(0 0 0 / 0.1);

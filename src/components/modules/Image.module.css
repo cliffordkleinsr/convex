@@ -18,8 +18,8 @@
 		&::after,
 		&::before {
 			position: absolute;
-			top: 20%;
-			right: 28%;
+			top: 30%;
+			right: 27%;
 			display: inline-block;
 			content: "";
 			width: 0.5em;
@@ -122,11 +122,29 @@
 		font-weight: 500;
 		font-size: larger;
 	}
-	> img {
-		height: 160px;
-		width: 160px;
-		object-fit: cover;
-		border-radius: 0.5rem;
+	div {
+		position: relative;
+
+		img {
+			height: 160px;
+			width: 160px;
+			object-fit: cover;
+			border-radius: 0.5rem;
+		}
+
+		form {
+			position: absolute;
+			top: 0;
+			right: 7%;
+
+			> button {
+				border: 1px solid oklch(0.44 0.16 27);
+				/* padding: 1px 1px; */
+				background-color: oklch(0.44 0.16 27);
+				border-radius: 0.23rem;
+				color: white;
+			}
+		}
 	}
 }
 

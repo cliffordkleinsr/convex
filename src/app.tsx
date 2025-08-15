@@ -1,7 +1,7 @@
 import { MetaProvider, Title } from "@solidjs/meta";
-import { Router } from "@solidjs/router";
+import { A, Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
-import { Suspense } from "solid-js";
+import { type Component, onMount, Suspense } from "solid-js";
 import "./app.css";
 import ConvexProvider from "./components/solid-convex";
 import { ConvexClient } from "convex/browser";

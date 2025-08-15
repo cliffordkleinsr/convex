@@ -2,6 +2,7 @@ import { Title } from "@solidjs/meta";
 import { faker } from "@faker-js/faker";
 import {
 	Accessor,
+	Component,
 	createEffect,
 	createSignal,
 	Index,
@@ -11,6 +12,8 @@ import {
 import styles from "~/components/modules/Chat.module.css";
 import { createMutation, createQuery } from "~/components/solid-convex";
 import { api } from "../../convex/_generated/api";
+import { A } from "@solidjs/router";
+
 type Messeges = {
 	_id: string;
 	user: string;
@@ -32,14 +35,15 @@ export default function Home() {
 	});
 
 	const [newMessage, setNewMessage] = createSignal("");
-
+	let mainEl: HTMLElement | undefined;
 	createEffect(
 		on(
-			[newMessage, messages],
+			[messages, newMessage],
 			() => {
+				if (!mainEl) return;
 				setTimeout(() => {
 					window.scrollTo({
-						top: document.body.scrollHeight,
+						top: mainEl.scrollHeight,
 						behavior: "smooth",
 					});
 				}, 0);
@@ -50,26 +54,32 @@ export default function Home() {
 	);
 
 	return (
-		<main class={styles.chat}>
+		<main class={styles.chat} ref={mainEl}>
 			<Title>Hello World</Title>
 			<header>
 				<h1> Convex Chat</h1>
 				<p>
 					Connected as <strong>{name()}</strong>
 				</p>
+				<div>
+					<A href="/">Chat Example</A>
+					<A href="/image">Upload Example</A>
+				</div>
 			</header>
-			<Index each={messages()}>
-				{(message) => (
-					<article
-						classList={{
-							[styles.message_mine]: message().user === name(),
-						}}
-					>
-						<div>{message().user}</div>
-						<p>{message().body}</p>
-					</article>
-				)}
-			</Index>
+			<section>
+				<Index each={messages()}>
+					{(message) => (
+						<article
+							classList={{
+								[styles.message_mine]: message().user === name(),
+							}}
+						>
+							<div>{message().user}</div>
+							<p>{message().body}</p>
+						</article>
+					)}
+				</Index>
+			</section>
 			<form
 				onSubmit={async (e) => {
 					e.preventDefault();
@@ -86,6 +96,8 @@ export default function Home() {
 						const text = e.target.value;
 						setNewMessage(text);
 					}}
+					placeholder="Write a message…"
+					autofocus
 				/>
 				<button type="submit" disabled={!newMessage()}>
 					Send
