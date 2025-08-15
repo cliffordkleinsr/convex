@@ -61,10 +61,10 @@ export default function Home() {
 				<p>
 					Connected as <strong>{name()}</strong>
 				</p>
-				<div>
+				<nav>
 					<A href="/">Chat Example</A>
 					<A href="/image">Upload Example</A>
-				</div>
+				</nav>
 			</header>
 			<section>
 				<Index each={messages()}>

@@ -79,10 +79,12 @@ export const fetchGallery = query({
 	handler: async function (ctx, args) {
 		const gallery = await ctx.db.query("gallery").order("desc").collect();
 		return Promise.all(
-			gallery.map(async (image) => ({
-				...image,
-				url: await ctx.storage.getUrl(image.storageId),
-			})).reverse(),
+			gallery
+				.map(async (image) => ({
+					...image,
+					url: await ctx.storage.getUrl(image.storageId),
+				}))
+				.reverse(),
 		);
 	},
 });

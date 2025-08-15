@@ -10,6 +10,7 @@ import styles from "~/components/modules/Image.module.css";
 import { createMutation, createQuery } from "~/components/solid-convex";
 import { api } from "../../convex/_generated/api";
 import { faker } from "@faker-js/faker";
+import { A } from "@solidjs/router";
 
 export default function ImageUpload() {
 	const [selectedImage, setSelectedImage] = createSignal<File | null>(null);
@@ -39,6 +40,17 @@ export default function ImageUpload() {
 
 	return (
 		<>
+			<nav
+				style={{
+					display: "flex",
+					"justify-content": "flex-end",
+					padding: "5ch 3ch",
+					gap: "10px",
+				}}
+			>
+				<A href="/">Chat Example</A>
+				<A href="/image">Upload Example</A>
+			</nav>
 			<section class={styles.container}>
 				<p>
 					Connected as <strong>{name()}</strong>
@@ -82,21 +94,21 @@ export default function ImageUpload() {
 						}}
 						disabled={selectedImage() !== null && isLoading()}
 					/>
-					<button disabled={selectedImage() === null || isLoading()} type="submit">
+					<button
+						disabled={selectedImage() === null || isLoading()}
+						type="submit"
+					>
 						{isLoading() ? <Loading /> : "Send Image"}
 					</button>
 				</form>
 			</section>
 			<main class={styles.images}>
 				<p>Gallery</p>
-				<For each={imageList()}>
-					{(images) => <Image gallery={images} />}
-				</For>
+				<For each={imageList()}>{(images) => <Image gallery={images} />}</For>
 			</main>
 		</>
 	);
 }
-
 
 type Gallery = {
 	_id: string;
@@ -124,8 +136,8 @@ const Image: Component<{
 				<button type="submit">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
-						width="14"
-						height="14"
+						width="16"
+						height="16"
 						viewBox="0 0 24 24"
 					>
 						<path
@@ -139,10 +151,32 @@ const Image: Component<{
 	);
 };
 
-
 const Loading: Component<{}> = (props) => {
-  
-  return (
-	<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity="0.5"/><path fill="currentColor" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z"><animateTransform attributeName="transform" dur="1s" from="0 12 12" repeatCount="indefinite" to="360 12 12" type="rotate"/></path></svg>
-  );
+	return (
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="24"
+			height="24"
+			viewBox="0 0 24 24"
+		>
+			<path
+				fill="currentColor"
+				d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z"
+				opacity="0.5"
+			/>
+			<path
+				fill="currentColor"
+				d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z"
+			>
+				<animateTransform
+					attributeName="transform"
+					dur="1s"
+					from="0 12 12"
+					repeatCount="indefinite"
+					to="360 12 12"
+					type="rotate"
+				/>
+			</path>
+		</svg>
+	);
 };
