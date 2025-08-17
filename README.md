@@ -42,3 +42,10 @@ Self Hosting convex on Dokploy is as follows:
 And thats it ! you've setup a project with convex and dokploy
 
 
+## Troubleshooting
+
+
+
+>Mixed Content: The page at https://api.my-domain.com' was loaded over HTTPS, but requested an insecure resource 'http://api.my-domain.com/api/check_admin_key'. This request has been blocked; the content must be served over HTTPS.
+
+Ensure you are using https not http or serve the backend with http explicitly

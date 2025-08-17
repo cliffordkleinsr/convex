@@ -11,7 +11,7 @@ import {
 } from "solid-js";
 import styles from "~/components/modules/Chat.module.css";
 import { createMutation, createQuery } from "~/components/solid-convex";
-import { api } from "../../convex/_generated/api";
+import { api } from "../../../convex/_generated/api";
 import { A } from "@solidjs/router";
 
 type Messeges = {

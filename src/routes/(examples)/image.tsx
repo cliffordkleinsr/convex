@@ -8,7 +8,7 @@ import {
 } from "solid-js";
 import styles from "~/components/modules/Image.module.css";
 import { createMutation, createQuery } from "~/components/solid-convex";
-import { api } from "../../convex/_generated/api";
+import { api } from "../../../convex/_generated/api";
 import { faker } from "@faker-js/faker";
 import { A } from "@solidjs/router";
 

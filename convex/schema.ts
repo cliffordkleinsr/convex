@@ -2,6 +2,9 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
 export default defineSchema({
+	users: defineTable({
+		// Fields are optional
+	}),
 	messages: defineTable({
 		body: v.string(),
 		user: v.string(),
