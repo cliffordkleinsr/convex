@@ -1,61 +1,72 @@
 import { action, redirect } from "@solidjs/router";
+import { createSignal, JSX, Show } from "solid-js";
+import { toast } from "solid-sonner";
 import styles from "~/components/modules/Login.module.css";
 import { authClient } from "~/lib/auth-client";
-type SignInData = {
-	email: string;
-	password: string;
-	remember?: string | undefined;
-};
-const signinAction = action(async (formData: FormData) => {
-	const data = Object.fromEntries(formData) as SignInData;
-	const { email, password, remember } = data;
-	await authClient.signIn.email(
-		{
-			/**
-			 * The user email
-			 */
-			email,
-			/**
-			 * The user password
-			 */
-			password,
-			/**
-			 * A URL to redirect to after the user verifies their email (optional)
-			 */
-			callbackURL: "/dashboard",
-			/**
-			 * remember the user session after the browser is closed.
-			 * @default true
-			 */
-			rememberMe: typeof remember === "string" ? true : false,
-		},
-		{
-			//callbacks
-			onRequest: (ctx) => {
-				//show loading
-			},
-			onSuccess: (ctx) => {
-				throw redirect("/dashboard");
-				//redirect to the dashboard or sign in page
-			},
-			onError: (ctx) => {
-				// display the error message
-				throw new Error(ctx.error.message);
-			},
-		},
-	);
-}, "sign_in");
 
 export default function SignIn() {
+	const [showSignIn, setShowSignIn] = createSignal(true);
+	const handleSubmit = async (e: SubmitEvent) => {
+		e.preventDefault();
+		const formData = new FormData(e.target as HTMLFormElement);
+
+		if (showSignIn()) {
+			const { data, error } = await authClient.signIn.email({
+					/**
+					 * The user email
+					 */
+					email: formData.get("email") as string,
+					/**
+					 * The user password
+					 */
+					password: formData.get("password") as string,
+					/**
+					 * A URL to redirect to after the user verifies their email (optional)
+					 */
+					callbackURL: "/authed",
+					/**
+					 * remember the user session after the browser is closed. 
+					 * @default true
+					 */
+					rememberMe: false
+			}, {
+				//callbacks
+				onError: (ctx) => {
+					// window.alert(ctx.error.message)
+					toast.error(ctx.error.message);
+				},
+				onSuccess: () => {
+					toast.success("User Logged in");
+					// throw redirect("/authed")
+				}
+			})
+		} else {
+			const { data, error } = await authClient.signUp.email({
+					email: formData.get("email") as string, // user email address
+					password: formData.get("password") as string, // user password -> min 8 characters by default
+					name: formData.get("name") as string, // user display name
+					// image, // User image URL (optional)
+					callbackURL: "/dashboard" // A URL to redirect to after the user verifies their email (optional)
+				}, {
+					
+					onError: (ctx) => {
+						// window.alert(ctx.error.message)
+						// display the error message
+						toast.error(ctx.error.message);
+					},
+			});
+		}
+	};
 	return (
 		<main class={styles.main_container}>
 			<section>
 				<header>
 					<h1>Sign in</h1>
-					<p>
+					{/* <p>
 						Don't have an account yet?
+						
 						<a href="../examples/html/signup.html">Sign up here</a>
-					</p>
+					</p> */}
 				</header>
 
 				<section class="mt-5">
@@ -84,12 +95,36 @@ export default function SignIn() {
 					<div>Or</div>
 
 					{/* Form */}
-					<form action={signinAction} method="post">
+					<form onSubmit={handleSubmit}>
 						<div>
 							{/* Form Group */}
+							<Show when={!showSignIn()}>
+								<div class={styles.input_wrapper}>
+									<label for="name">Username</label>
+									<input
+										type="text"
+										id="name"
+										name="name"
+										required
+										aria-describedby="name-error"
+									/>
+									<div  class={styles.icon}>
+										<svg
+											width="16"
+											height="16"
+											fill="currentColor"
+											viewBox="0 0 16 16"
+											aria-hidden="true"
+										>
+											<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
+										</svg>
+									</div>
+									<p id="email-error">Please include a valid username</p>
+								</div>
+							</Show>
 							<div>
 								<label for="email">Email address</label>
-								<div>
+								<div class={styles.input_wrapper}>
 									<input
 										type="email"
 										id="email"
@@ -97,7 +132,7 @@ export default function SignIn() {
 										required
 										aria-describedby="email-error"
 									/>
-									<div>
+									<div class={styles.icon}>
 										<svg
 											width="16"
 											height="16"
@@ -109,21 +144,19 @@ export default function SignIn() {
 										</svg>
 									</div>
 								</div>
-								<p id="email-error">
-									Please include a valid email address so we can get back to you
-								</p>
+								<p id="email-error">Please include a valid email address</p>
 							</div>
 							{/* End Form Group */}
 
 							{/* Form Group */}
 							<div>
-								<div>
+								<div class={styles.forgot_wrapper}>
 									<label for="password">Password</label>
 									<a href="../examples/html/recover-account.html">
 										Forgot password?
 									</a>
 								</div>
-								<div>
+								<div class={styles.input_wrapper}>
 									<input
 										type="password"
 										id="password"
@@ -131,7 +164,7 @@ export default function SignIn() {
 										required
 										aria-describedby="password-error"
 									/>
-									<div>
+									<div class={styles.icon}>
 										<svg
 											width="16"
 											height="16"
@@ -148,7 +181,7 @@ export default function SignIn() {
 							{/* End Form Group */}
 
 							{/* Checkbox */}
-							<div>
+							<div class={styles.checkbox_group}>
 								<div>
 									<input id="remember-me" name="remember-me" type="checkbox" />
 								</div>
@@ -158,12 +191,24 @@ export default function SignIn() {
 							</div>
 							{/* End Checkbox */}
 
-							<button type="submit">Sign in</button>
+							<button type="submit">
+								{showSignIn() ? "Sign in" : "Sign up"}
+							</button>
 						</div>
 					</form>
 					{/* End Form */}
+					<section class={styles.switcher}>
+						<p>
+							 Don't have an account yet? 
+						</p>
+						<a onClick={() => setShowSignIn(!showSignIn())}>
+							{showSignIn() ? "Sign up" : "Sign in"}
+						</a>
+					</section>
+	
 				</section>
 			</section>
+
 		</main>
 	);
 }
