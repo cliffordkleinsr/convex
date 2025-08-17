@@ -11,7 +11,8 @@ export default function SignIn() {
 		const formData = new FormData(e.target as HTMLFormElement);
 
 		if (showSignIn()) {
-			const { data, error } = await authClient.signIn.email({
+			const { data, error } = await authClient.signIn.email(
+				{
 					/**
 					 * The user email
 					 */
@@ -25,36 +26,43 @@ export default function SignIn() {
 					 */
 					callbackURL: "/authed",
 					/**
-					 * remember the user session after the browser is closed. 
+					 * remember the user session after the browser is closed.
 					 * @default true
 					 */
-					rememberMe: false
-			}, {
-				//callbacks
-				onError: (ctx) => {
-					// window.alert(ctx.error.message)
-					toast.error(ctx.error.message);
+					rememberMe: false,
 				},
-				onSuccess: () => {
-					toast.success("User Logged in");
-					// throw redirect("/authed")
-				}
-			})
+				{
+					//callbacks
+					onError: (ctx) => {
+						window.alert(ctx.error.message);
+						// toast.error(ctx.error.message);
+					},
+					onSuccess: () => {
+						toast.success("User Logged in");
+						// throw redirect("/authed")
+					},
+				},
+			);
 		} else {
-			const { data, error } = await authClient.signUp.email({
+			const { data, error } = await authClient.signUp.email(
+				{
 					email: formData.get("email") as string, // user email address
 					password: formData.get("password") as string, // user password -> min 8 characters by default
 					name: formData.get("name") as string, // user display name
 					// image, // User image URL (optional)
-					callbackURL: "/dashboard" // A URL to redirect to after the user verifies their email (optional)
-				}, {
-					
+					callbackURL: "/dashboard", // A URL to redirect to after the user verifies their email (optional)
+				},
+				{
 					onError: (ctx) => {
-						// window.alert(ctx.error.message)
+						window.alert(ctx.error.message);
 						// display the error message
-						toast.error(ctx.error.message);
+						// toast.error(ctx.error.message);
 					},
-			});
+					onSuccess: (context) => {
+						setShowSignIn(!showSignIn());
+					},
+				},
+			);
 		}
 	};
 	return (
@@ -108,7 +116,7 @@ export default function SignIn() {
 										required
 										aria-describedby="name-error"
 									/>
-									<div  class={styles.icon}>
+									<div class={styles.icon}>
 										<svg
 											width="16"
 											height="16"
@@ -198,17 +206,13 @@ export default function SignIn() {
 					</form>
 					{/* End Form */}
 					<section class={styles.switcher}>
-						<p>
-							 Don't have an account yet? 
-						</p>
+						<p>Don't have an account yet?</p>
 						<a onClick={() => setShowSignIn(!showSignIn())}>
 							{showSignIn() ? "Sign up" : "Sign in"}
 						</a>
 					</section>
-	
 				</section>
 			</section>
-
 		</main>
 	);
 }

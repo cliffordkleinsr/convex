@@ -23,7 +23,6 @@
 				font-size: xx-large;
 				font-weight: bold;
 			}
-			
 		}
 		> section {
 			margin-top: 20px;
@@ -178,7 +177,7 @@
 					justify-content: space-between;
 					align-items: center;
 					gap: 8px;
-					
+
 					label {
 						display: block;
 						font-size: small;
@@ -236,8 +235,8 @@
 				margin-top: 8px;
 				align-items: center;
 				p {
-				margin: 8px 0;
-				font-size: small;
+					margin: 8px 0;
+					font-size: small;
 				}
 				a {
 					color: oklch(0.55 0.22 263);
@@ -253,7 +252,6 @@
 						text-decoration: underline;
 					}
 				}
-			
 			}
 		}
 	}

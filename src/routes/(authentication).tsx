@@ -10,7 +10,7 @@ const convex = new ConvexClient(import.meta.env.VITE_CONVEX_URL!);
 export default function AuthLayout(props: RouteSectionProps) {
 	return (
 		<ConvexBetterAuthProvider client={convex} authClient={authClient}>
-			<Toaster richColors/>
+			<Toaster richColors />
 			{props.children}
 		</ConvexBetterAuthProvider>
 	);
