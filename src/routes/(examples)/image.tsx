@@ -10,7 +10,6 @@ import styles from "~/components/modules/Image.module.css";
 import { createMutation, createQuery } from "~/components/solid-convex";
 import { api } from "../../../convex/_generated/api";
 import { faker } from "@faker-js/faker";
-import { A } from "@solidjs/router";
 
 export default function ImageUpload() {
 	const [selectedImage, setSelectedImage] = createSignal<File | null>(null);
@@ -36,21 +35,10 @@ export default function ImageUpload() {
 		setName(storedName);
 	});
 
-	createEffect(() => console.log(imageList()));
+	// createEffect(() => console.log(imageList()));
 
 	return (
 		<>
-			<nav
-				style={{
-					display: "flex",
-					"justify-content": "flex-end",
-					padding: "5ch 3ch",
-					gap: "10px",
-				}}
-			>
-				<A href="/">Chat Example</A>
-				<A href="/image">Upload Example</A>
-			</nav>
 			<section class={styles.container}>
 				<p>
 					Connected as <strong>{name()}</strong>

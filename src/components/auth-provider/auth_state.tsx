@@ -1,4 +1,3 @@
-// src/lib/ConvexProviderWithAuth.tsx
 import {
 	createContext,
 	useContext,
@@ -7,17 +6,17 @@ import {
 	createSignal,
 	createEffect,
 	onCleanup,
-	onMount,
+	createMemo,
 } from "solid-js";
-import ConvexProvider from "../solid-convex/index"; // <- convex Solid provider if available
+import ConvexProvider from "../solid-convex/index";
 import { ConvexClient } from "convex/browser";
 
 export type ConvexAuthState = {
-	isLoading: boolean;
-	isAuthenticated: boolean;
+	isLoading: Accessor<boolean>;
+	isAuthenticated: Accessor<boolean>;
 };
 
-const ConvexAuthContext = createContext<Accessor<ConvexAuthState>>();
+const ConvexAuthContext = createContext<ConvexAuthState>();
 
 export function useConvexAuth(): ConvexAuthState {
 	const ctx = useContext(ConvexAuthContext);
@@ -26,7 +25,7 @@ export function useConvexAuth(): ConvexAuthState {
 			"Could not find `ConvexProviderWithAuth`. Make sure it's wrapping your app.",
 		);
 	}
-	return ctx();
+	return ctx;
 }
 
 export function ConvexProviderWithAuth(props: {
@@ -40,71 +39,87 @@ export function ConvexProviderWithAuth(props: {
 		}) => Promise<string | null>;
 	};
 }) {
-	const { client, useAuth } = props;
-	const {
-		isLoading: authProviderLoading,
-		isAuthenticated: authProviderAuthenticated,
-		fetchAccessToken,
-	} = useAuth();
+	const { client } = props;
+
+	// Get auth state reactively
+	const authState = createMemo(() => props.useAuth());
 
 	const [isConvexAuthenticated, setIsConvexAuthenticated] = createSignal<
 		boolean | null
 	>(null);
 
-	// keep auth state in sync with provider
+	// Reset Convex auth state when provider goes back to loading
 	createEffect(() => {
-		if (authProviderLoading && isConvexAuthenticated() !== null) {
+		const auth = authState();
+		if (auth.isLoading && isConvexAuthenticated() !== null) {
 			setIsConvexAuthenticated(null);
 		}
+	});
+
+	// Set Convex auth to false when provider is not authenticated
+	createEffect(() => {
+		const auth = authState();
+
 		if (
-			!authProviderLoading &&
-			!authProviderAuthenticated &&
+			!auth.isLoading &&
+			!auth.isAuthenticated &&
 			isConvexAuthenticated() !== false
 		) {
 			setIsConvexAuthenticated(false);
 		}
 	});
 
-	// First effect: setAuth when provider reports authenticated
-	onMount(() => {
-		if (authProviderAuthenticated) {
-			let active = true;
-			client.setAuth(fetchAccessToken, (backendReportsIsAuthenticated) => {
-				if (active) setIsConvexAuthenticated(backendReportsIsAuthenticated);
+	// Handle setting auth when provider reports authenticated
+	createEffect(() => {
+		const auth = authState();
+
+		if (auth.isAuthenticated) {
+			let isEffectActive = true;
+
+			client.setAuth(auth.fetchAccessToken, (backendReportsIsAuthenticated) => {
+				if (isEffectActive) {
+					setIsConvexAuthenticated(backendReportsIsAuthenticated);
+				}
 			});
 
 			onCleanup(() => {
-				active = false;
+				isEffectActive = false;
+				// If unmounting or auth changed before we finished fetching the token
+				// we shouldn't transition to a loaded state
 				setIsConvexAuthenticated((prev) => (prev ? false : null));
 			});
 		}
 	});
+
 	function clearAuth(client: ConvexClient) {
 		client.setAuth(
 			async () => null,
 			() => {},
 		);
 	}
-
-	// Last effect: clearAuth when unmounting or auth changes
+	// Handle clearing auth - this should happen after other effects
 	createEffect(() => {
-		if (authProviderAuthenticated) {
+		const auth = authState();
+
+		if (auth.isAuthenticated) {
 			onCleanup(() => {
 				clearAuth(client);
+				// Set state back to loading in case this is a transition from one
+				// fetchToken function to another
 				setIsConvexAuthenticated(null);
 			});
 		}
 	});
 
+	// Create reactive accessors for the context
+	const isLoading = createMemo(() => isConvexAuthenticated() === null);
+	const isAuthenticated = createMemo(
+		() => authState().isAuthenticated && (isConvexAuthenticated() ?? false),
+	);
+
 	return (
-		<ConvexAuthContext.Provider
-			value={() => ({
-				isLoading: isConvexAuthenticated() === null,
-				isAuthenticated:
-					authProviderAuthenticated && (isConvexAuthenticated() ?? false),
-			})}
-		>
-			<ConvexProvider client={client as any}>{props.children}</ConvexProvider>
+		<ConvexAuthContext.Provider value={{ isLoading, isAuthenticated }}>
+			<ConvexProvider client={client}>{props.children}</ConvexProvider>
 		</ConvexAuthContext.Provider>
 	);
 }

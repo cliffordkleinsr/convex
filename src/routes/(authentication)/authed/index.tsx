@@ -1,24 +1,50 @@
-import { createMutation, createQuery } from "~/components/solid-convex";
+import { createQuery } from "~/components/solid-convex";
 import { api } from "../../../../convex/_generated/api";
 import { authClient } from "~/lib/auth-client";
-import { useNavigate } from "@solidjs/router";
+import {
+	action,
+	createAsync,
+	query,
+	redirect,
+	useAction,
+} from "@solidjs/router";
+import { createConvexHttpClient } from "~/lib/start";
+
+const checkSession = query(async () => {
+	"use server";
+	const client = createConvexHttpClient();
+	const data = await client.query(api.session.getSession, {});
+	if (!data?.session) {
+		throw redirect("/signin");
+	}
+	return data?.session;
+}, "check_session");
+
+const signOut = action(async () => {
+	try {
+		await authClient.signOut();
+	} catch (error) {
+		if (error instanceof Error) {
+			throw new Error(error.message);
+		}
+	}
+
+	throw redirect("/signin");
+}, "sign_out");
 
 export default function Dash() {
-	const user = createQuery(api.auth.getCurrentUser);
-	const authed = createQuery(api.auth.isAuthenticated);
-	const navigate = useNavigate();
+	const signOutAction = useAction(signOut);
+	const session = createAsync(() => checkSession(), { deferStream: true }); // no delay
+	const user = createQuery(api.auth.getCurrentUser); //client method ,notice the delay
+	const authed = createQuery(api.auth.isAuthenticated); //client method ,notice the delay
+	// const session = createQuery<any>(api.session.getSession) //client method of getting sess with convex
+
 	return (
 		<>
-			<pre>{JSON.stringify(user(), null, 2)}</pre>
-			<pre>{JSON.stringify(authed(), null, 2)}</pre>
-			<button
-				onClick={async () => {
-					await authClient.signOut();
-					navigate("/signin", { replace: true });
-				}}
-			>
-				logout
-			</button>
+			<pre>User: {JSON.stringify(user(), null, 2)}</pre>
+			<pre>Is Authenticated: {JSON.stringify(authed(), null, 2)}</pre>
+			<pre>Server based Session: {JSON.stringify(session(), null, 2)}</pre>
+			<button onClick={signOutAction}>logout</button>
 		</>
 	);
 }

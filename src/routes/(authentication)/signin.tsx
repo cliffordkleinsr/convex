@@ -1,6 +1,7 @@
 import { action, redirect } from "@solidjs/router";
-import { createSignal, JSX, Show } from "solid-js";
+import { createEffect, createSignal, JSX, Show } from "solid-js";
 import { toast } from "solid-sonner";
+import { useConvexAuth } from "~/components/auth-provider/auth_state";
 import styles from "~/components/modules/Login.module.css";
 import { authClient } from "~/lib/auth-client";
 

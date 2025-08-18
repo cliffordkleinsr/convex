@@ -8,6 +8,9 @@ export default defineSchema({
 	messages: defineTable({
 		body: v.string(),
 		user: v.string(),
+	}).searchIndex("search_body", {
+		searchField: "body",
+		filterFields: ["user"],
 	}),
 	gallery: defineTable({
 		storageId: v.id("_storage"),

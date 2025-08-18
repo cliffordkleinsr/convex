@@ -102,6 +102,17 @@ export const deleteImgId = mutation({
 	},
 });
 
+export const searchResults = query({
+	args: {
+		query: v.string(),
+	},
+	handler: async function (ctx, args) {
+		return await ctx.db
+			.query("messages")
+			.withSearchIndex("search_body", (q) => q.search("body", args.query))
+			.take(10);
+	},
+});
 export const removeImageRef = internalMutation({
 	args: {
 		id: v.id("gallery"),

@@ -4,7 +4,9 @@ import {
 	Accessor,
 	Component,
 	createEffect,
+	createMemo,
 	createSignal,
+	For,
 	Index,
 	on,
 	onMount,
@@ -12,7 +14,6 @@ import {
 import styles from "~/components/modules/Chat.module.css";
 import { createMutation, createQuery } from "~/components/solid-convex";
 import { api } from "../../../convex/_generated/api";
-import { A } from "@solidjs/router";
 
 type Messeges = {
 	_id: string;
@@ -21,8 +22,16 @@ type Messeges = {
 };
 export default function Home() {
 	const [name, setName] = createSignal("");
-
+	// fetch messages
 	const messages = createQuery<Messeges[]>(api.chat.getMessages);
+
+	const [searchText, setSearchText] = createSignal("");
+	// use a memo to recompute the query args
+	const searchResults = createMemo<any>(
+		() => createQuery(api.chat.searchResults, { query: searchText() }) || [],
+	);
+
+	// send messages
 	const sendMessage = createMutation(api.chat.sendMessage);
 	onMount(() => {
 		const NAME_KEY = "tutorial_name";
@@ -61,10 +70,6 @@ export default function Home() {
 				<p>
 					Connected as <strong>{name()}</strong>
 				</p>
-				<nav>
-					<A href="/">Chat Example</A>
-					<A href="/image">Upload Example</A>
-				</nav>
 			</header>
 			<section>
 				<Index each={messages()}>
@@ -103,6 +108,27 @@ export default function Home() {
 					Send
 				</button>
 			</form>
+			<div class={styles.search}>
+				<h2>Search Messages</h2>
+				<input
+					value={searchText()}
+					onChange={(event) => setSearchText(event.target.value)}
+					placeholder="Search!"
+				/>
+				<ul>
+					<For each={searchResults()()}>
+						{(searchResult) => (
+							<li>
+								<span>{searchResult.user}:</span>
+								<span class={styles.text_wrapper}>{searchResult.body}</span>
+								<span>
+									{new Date(searchResult._creationTime).toLocaleTimeString()}
+								</span>
+							</li>
+						)}
+					</For>
+				</ul>
+			</div>
 		</main>
 	);
 }
