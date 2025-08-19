@@ -87,7 +87,6 @@
 			font-size: small;
 			font-weight: 500;
 			border-radius: 0.5rem;
-			border: 1px solid var(--default-color);
 			color: oklab(from grey l a b);
 			background: transparent;
 			&:hover,

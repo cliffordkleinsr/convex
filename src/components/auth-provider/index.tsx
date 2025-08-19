@@ -1,4 +1,4 @@
-import { ParentComponent } from "solid-js";
+import type { ParentComponent } from "solid-js";
 import { ConvexProviderWithAuth } from "./auth_state"; // Solid port
 import {
 	AuthProvider,

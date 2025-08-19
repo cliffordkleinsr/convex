@@ -1,5 +1,5 @@
 import { useConvexAuth } from "./auth_state";
-import { ParentComponent, Show } from "solid-js";
+import { type ParentComponent, Show } from "solid-js";
 
 /**
  * Renders children if the client is authenticated.

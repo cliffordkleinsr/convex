@@ -1,9 +1,9 @@
 // routes/blog.tsx
-import { RouteSectionProps, useLocation } from "@solidjs/router";
+import { type RouteSectionProps, useLocation } from "@solidjs/router";
 import ConvexProvider from "~/components/solid-convex";
 import { ConvexClient } from "convex/browser";
 import { A } from "@solidjs/router";
-import { JSX } from "solid-js";
+import type { JSX } from "solid-js";
 
 const convex = new ConvexClient(import.meta.env.VITE_CONVEX_URL!);
 

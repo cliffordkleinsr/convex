@@ -1,16 +1,6 @@
 import { Title } from "@solidjs/meta";
 import { faker } from "@faker-js/faker";
-import {
-	Accessor,
-	Component,
-	createEffect,
-	createMemo,
-	createSignal,
-	For,
-	Index,
-	on,
-	onMount,
-} from "solid-js";
+import { createEffect, createSignal, For, Index, on, onMount } from "solid-js";
 import styles from "~/components/modules/Chat.module.css";
 import { createMutation, createQuery } from "~/components/solid-convex";
 import { api } from "../../../convex/_generated/api";
@@ -27,9 +17,9 @@ export default function Home() {
 
 	const [searchText, setSearchText] = createSignal("");
 	// use a memo to recompute the query args
-	const searchResults = createMemo<any>(
-		() => createQuery(api.chat.searchResults, { query: searchText() }) || [],
-	);
+	const searchResults = createQuery<any>(api.chat.searchResults, () => ({
+		query: searchText(),
+	}));
 
 	// send messages
 	const sendMessage = createMutation(api.chat.sendMessage);
@@ -116,7 +106,7 @@ export default function Home() {
 					placeholder="Search!"
 				/>
 				<ul>
-					<For each={searchResults()()}>
+					<For each={searchResults()}>
 						{(searchResult) => (
 							<li>
 								<span>{searchResult.user}:</span>

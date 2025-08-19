@@ -1,9 +1,11 @@
 import type { ConvexClient } from "convex/browser";
-import { FunctionReference } from "convex/server";
+import type { FunctionReference } from "convex/server";
 import {
-	Context,
+	type Context,
 	createContext,
-	from,
+	createEffect,
+	createSignal,
+	onCleanup,
 	type ParentComponent,
 	useContext,
 } from "solid-js";
@@ -13,17 +15,24 @@ export const ConvexContext: Context<ConvexClient | undefined> = createContext();
 // Create a reactive SolidJS atom attached to a Convex query function.
 export function createQuery<T>(
 	query: FunctionReference<"query">,
-	args?: {},
+	args?: () => {}, // 👈 accept an accessor instead of plain object
 ): () => T | undefined {
 	const convex = useContext(ConvexContext);
 	if (convex === undefined) {
 		throw "No convex context";
 	}
-	let fullArgs = args ?? {};
-	return from((setter) => {
-		const unsubber = convex!.onUpdate(query, fullArgs, setter);
-		return unsubber;
+
+	const [value, setValue] = createSignal<T | undefined>();
+
+	createEffect(() => {
+		// evaluate args reactively
+		const fullArgs = args ? args() : {};
+		const unsubber = convex.onUpdate(query, fullArgs, setValue);
+
+		onCleanup(unsubber); // cleanup subscription when args change
 	});
+
+	return value;
 }
 
 export function createMutation<T>(
@@ -35,7 +44,7 @@ export function createMutation<T>(
 	}
 
 	return (args) => {
-		let fullArgs = args ?? {};
+		const fullArgs = args ?? {};
 		return convex.mutation(mutation, fullArgs);
 	};
 }
@@ -48,7 +57,7 @@ export function createAction<T>(
 		throw "No convex context";
 	}
 	return (args) => {
-		let fullArgs = args ?? {};
+		const fullArgs = args ?? {};
 		return convex.action(action, fullArgs);
 	};
 }

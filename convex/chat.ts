@@ -59,7 +59,7 @@ export const sendImage = mutation({
 		storageId: v.id("_storage"),
 		author: v.string(),
 	},
-	handler: async function (ctx, args) {
+	handler: async (ctx, args) => {
 		await ctx.db.insert("gallery", {
 			storageId: args.storageId,
 			author: args.author,
@@ -76,7 +76,7 @@ export const generateUploadUrl = mutation({
 
 export const fetchGallery = query({
 	args: {},
-	handler: async function (ctx, args) {
+	handler: async (ctx, args) => {
 		const gallery = await ctx.db.query("gallery").order("desc").collect();
 		return Promise.all(
 			gallery
@@ -94,7 +94,7 @@ export const deleteImgId = mutation({
 		storageId: v.id("_storage"),
 		id: v.id("gallery"),
 	},
-	handler: async function (ctx, args) {
+	handler: async (ctx, args) => {
 		await ctx.storage.delete(args.storageId);
 		await ctx.runMutation(internal.chat.removeImageRef, {
 			id: args.id,
@@ -106,20 +106,17 @@ export const searchResults = query({
 	args: {
 		query: v.string(),
 	},
-	handler: async function (ctx, args) {
-		return await ctx.db
+	handler: async (ctx, args) =>
+		await ctx.db
 			.query("messages")
 			.withSearchIndex("search_body", (q) => q.search("body", args.query))
-			.take(10);
-	},
+			.take(10),
 });
 export const removeImageRef = internalMutation({
 	args: {
 		id: v.id("gallery"),
 	},
-	handler: async function (ctx, args) {
-		return await ctx.db.delete(args.id);
-	},
+	handler: async (ctx, args) => await ctx.db.delete(args.id),
 });
 function getSummaryFromJSON(data: any) {
 	const firstPageId = Object.keys(data.query.pages)[0];

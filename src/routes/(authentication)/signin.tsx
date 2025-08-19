@@ -1,7 +1,5 @@
-import { action, redirect } from "@solidjs/router";
-import { createEffect, createSignal, JSX, Show } from "solid-js";
+import { createSignal, Show } from "solid-js";
 import { toast } from "solid-sonner";
-import { useConvexAuth } from "~/components/auth-provider/auth_state";
 import styles from "~/components/modules/Login.module.css";
 import { authClient } from "~/lib/auth-client";
 
@@ -35,8 +33,8 @@ export default function SignIn() {
 				{
 					//callbacks
 					onError: (ctx) => {
-						window.alert(ctx.error.message);
-						// toast.error(ctx.error.message);
+						// window.alert(ctx.error.message);
+						toast.error(ctx.error.message);
 					},
 					onSuccess: () => {
 						toast.success("User Logged in");
@@ -59,7 +57,7 @@ export default function SignIn() {
 						// display the error message
 						// toast.error(ctx.error.message);
 					},
-					onSuccess: (context) => {
+					onSuccess: (_context) => {
 						setShowSignIn(!showSignIn());
 					},
 				},

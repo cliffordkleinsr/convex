@@ -1,20 +1,19 @@
 import {
-	ParentComponent,
+	type ParentComponent,
 	createContext,
 	useContext,
 	createSignal,
 	createEffect,
 	createMemo,
-	onCleanup,
 	onMount,
 } from "solid-js";
-import { ConvexClient, ConvexClientOptions } from "convex/browser";
+import { ConvexClient, type ConvexClientOptions } from "convex/browser";
 import type { BetterAuthClientPlugin, ClientOptions } from "better-auth";
 import type {
 	crossDomainClient,
 	convexClient,
 } from "@convex-dev/better-auth/client/plugins";
-import { createAuthClient } from "better-auth/solid";
+import type { createAuthClient } from "better-auth/solid";
 // Types
 export type ConvexAuthClient = {
 	verbose?: boolean;

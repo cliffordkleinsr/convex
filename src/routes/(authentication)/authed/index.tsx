@@ -32,6 +32,10 @@ const signOut = action(async () => {
 	throw redirect("/signin");
 }, "sign_out");
 
+export const route = {
+	preload: () => checkSession(),
+};
+
 export default function Dash() {
 	const signOutAction = useAction(signOut);
 	const session = createAsync(() => checkSession(), { deferStream: true }); // no delay
