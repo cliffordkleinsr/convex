@@ -68,7 +68,10 @@ The steps should be the same as vercel but with the NETLIFY arguments
 
 Select nixpacks as the build deployment then add the following env file:
 ```sh
-NIXPACKS_BUILD_CMD=bunx convex deploy --cmd-url-env-var-name VITE_CONVEX_URL --cmd 'vinxi build'
+NIXPACKS_BUILD_CMD='bunx convex deploy --cmd-url-env-var-name VITE_CONVEX_URL --cmd 'vinxi build''
+CONVEX_SELF_HOSTED_URL='https://api.my-domain.com'
+CONVEX_SELF_HOSTED_ADMIN_KEY='your key'
+VITE_CONVEX_SITE_URL='https://site.my-domain.com'
 ```
 
 ## Troubleshooting
