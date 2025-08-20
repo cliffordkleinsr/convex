@@ -42,10 +42,37 @@ Self Hosting convex on Dokploy is as follows:
 And thats it ! you've setup a project with convex and dokploy
 
 
+## DEPLOYMENT
+
+### Vercel
+
+Set the following as your  build command:
+```sh
+VERCEL="" bunx convex deploy --cmd "VERCEL=true vinxi build" --cmd-url-env-var-name VITE_CONVEX_URL
+```
+and the following environment variables:
+```sh
+CONVEX_SELF_HOSTED_URL='https://api.my-domain.com'
+CONVEX_SELF_HOSTED_ADMIN_KEY='your key'
+VITE_CONVEX_SITE_URL='https://site.my-domain.com'
+```
+
+Then deploy
+
+
+### NETLIFY
+The steps should be the same as vercel but with the NETLIFY arguments
+
+
+### DOKPLOY
+
+Select nixpacks as the build deployment then add the following env file:
+```sh
+NIXPACKS_BUILD_CMD=bunx convex deploy --cmd-url-env-var-name VITE_CONVEX_URL --cmd 'vinxi build'
+```
+
 ## Troubleshooting
-
-
 
 >Mixed Content: The page at https://api.my-domain.com' was loaded over HTTPS, but requested an insecure resource 'http://api.my-domain.com/api/check_admin_key'. This request has been blocked; the content must be served over HTTPS.
 
-Ensure you are using https not http or serve the backend with http explicitly
+Ensure you are using https not http or serve the backend with https explicitly

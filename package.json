@@ -24,7 +24,7 @@
 		"node": ">=22"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.1.4",
+		"@biomejs/biome": "2.2.0",
 		"@faker-js/faker": "^9.9.0",
 		"concurrently": "^9.2.0",
 		"convex": "^1.25.4"
