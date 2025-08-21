@@ -1,6 +1,15 @@
 
-## Convex
+## Convex + SolidJS
 
+- Contains a working better-auth port for solid js for both convex http and convex client. See [signin.tsx](./src/routes/(authentication)/signin.tsx), [handler](./src/lib/start/index.ts), and all the files under the directory `src/components/auth-provider`
+- Contains a working  example showcasing full text search. See [here](./src//routes/(examples)/index.tsx) 
+
+- Contains a working  example showcasing Real-time chat with live database updates. See [here](./src/routes/(examples)/index.tsx)
+
+- Contains a working  example showcasing Realtime File Uploads. See [here](./src/routes/(examples)/image.tsx)
+
+
+## Self-Hosting (Dokploy)
 Self Hosting convex on Dokploy is as follows:
 
 1. Download the compose file from this [url](https://github.com/get-convex/convex-backend/tree/main/self-hosted/docker/docker-compose.yml)
