@@ -13,7 +13,7 @@ export const createAuth = (ctx: GenericCtx) =>
 		// All auth requests will be proxied through your TanStack Start server
 		baseURL: siteUrl,
 		database: convexAdapter(ctx, betterAuthComponent),
-
+		trustedOrigins: ["http://localhost:3000", "https://convex.cliff.co.ke"],
 		// Simple non-verified email/password to get started
 		emailAndPassword: {
 			enabled: true,

@@ -3,7 +3,7 @@
 	align-items: center;
 	justify-content: center;
 	width: 100%;
-	margin: 28px auto;
+	margin: 6ch 0.4rem;
 	border: 1px solid oklab(from rgb(190, 189, 189) l a b);
 	border-radius: 1rem;
 	box-shadow: 0 1px rgb(0 0 0 / 0.05);
@@ -254,5 +254,11 @@
 				}
 			}
 		}
+	}
+}
+
+@media (min-width: 450px) {
+	.main_container {
+		margin: 6ch auto;
 	}
 }

@@ -4,7 +4,7 @@
 	justify-content: center;
 	flex-direction: column;
 	padding: 3ch 1.1rem;
-	margin: 1rem auto;
+	margin: 6ch 0.4rem;
 	max-width: 45ch;
 	border: 1px solid oklab(from rgb(143, 143, 143) l a b);
 	border-radius: 10px;
@@ -152,5 +152,11 @@
 	100% {
 		transform: scale(2);
 		opacity: 0;
+	}
+}
+
+@media (min-width: 450px) {
+	.container {
+		margin: 6ch auto;
 	}
 }

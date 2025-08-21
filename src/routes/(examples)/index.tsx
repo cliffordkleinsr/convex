@@ -14,7 +14,8 @@ export default function Home() {
 	const [name, setName] = createSignal("");
 	// fetch messages
 	const messages = createQuery<Messeges[]>(api.chat.getMessages);
-
+	// expand search bar
+	const [expanded, setExpanded] = createSignal(false);
 	const [searchText, setSearchText] = createSignal("");
 	// use a memo to recompute the query args
 	const searchResults = createQuery<any>(api.chat.searchResults, () => ({
@@ -98,10 +99,15 @@ export default function Home() {
 					Send
 				</button>
 			</form>
-			<div class={styles.search}>
+			<div
+				class={styles.search}
+				classList={{ [styles.expanded]: expanded() }}
+				onClick={() => setExpanded(!expanded())}
+			>
 				<h2>Search Messages</h2>
 				<input
 					value={searchText()}
+					onClick={(event) => event.stopPropagation()}
 					onChange={(event) => setSearchText(event.target.value)}
 					placeholder="Search!"
 				/>

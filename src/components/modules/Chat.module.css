@@ -337,21 +337,17 @@ article button span {
 	padding: 12px;
 	text-align: left;
 	position: fixed;
-	bottom: 5%;
-	right: 2%;
-	width: 360px;
-	height: 220px;
+	top: 6%;
+	right: 0;
+	width: 35ch;
+	height: 40px;
 	overflow-y: auto;
 	background: #1e1e1e;
 	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+	cursor: pointer;
 	transition:
 		height 0.3s ease,
 		box-shadow 0.3s ease;
-
-	&:hover {
-		height: 420px;
-		box-shadow: 0 12px 28px rgba(0, 0, 0, 0.75);
-	}
 
 	h2 {
 		font-size: 18px;
@@ -440,6 +436,10 @@ article button span {
 	}
 }
 
+.search.expanded {
+	height: 220px; /* expand on tap */
+	overflow-y: auto;
+}
 .text_wrapper {
 	overflow: hidden;
 	display: -webkit-box;
@@ -447,4 +447,19 @@ article button span {
 	-webkit-line-clamp: 3;
 	line-clamp: 3;
 	text-overflow: ellipsis;
+}
+
+@media (min-width: 450px) {
+	.search {
+		top: auto;
+		bottom: 5%;
+		right: 2%;
+		width: 360px;
+		height: 220px;
+
+		&:hover {
+			height: 420px;
+			box-shadow: 0 12px 28px rgba(0, 0, 0, 0.75);
+		}
+	}
 }
