@@ -72,7 +72,6 @@
 				&::after {
 					content: "";
 					flex: 1;
-					border-top-width: 1px;
 					border: 1px solid oklch(0.93 0.01 265);
 					margin-inline-end: 24px;
 				}

@@ -145,7 +145,9 @@ export const AuthProvider: ParentComponent<{
 				url.searchParams.delete("ott");
 				window.history.replaceState({}, "", url);
 			}
-		})();
+		})().catch((err) => {
+			console.error("onMount async task failed:", err);
+		});
 	});
 
 	// ---- PROVIDE CONTEXT ----

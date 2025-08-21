@@ -4,10 +4,15 @@ import { ConvexClient } from "convex/browser";
 import { Toaster } from "solid-sonner";
 import { ConvexBetterAuthProvider } from "~/components/auth-provider";
 import { authClient } from "~/lib/auth-client";
-import { A } from "@solidjs/router";
 import NavBar from "~/components/NavBar";
 
-const convex = new ConvexClient(import.meta.env.VITE_CONVEX_URL!);
+const convexUrl = import.meta.env.VITE_CONVEX_URL;
+
+if (!convexUrl) {
+	throw new Error("VITE_CONVEX_URL is not defined in the environment");
+}
+
+const convex = new ConvexClient(convexUrl);
 
 export default function AuthLayout(props: RouteSectionProps) {
 	return (

@@ -22,9 +22,8 @@ export const getToken = async (
 
 	const cookies = parseCookies(event.nativeEvent);
 	const token = cookies[cookie.name];
-	console.log(token);
 
-	// Warn if there's a secure/insecure cookie mismatch like Next.js does
+	// Warn if there's a secure/insecure cookie mismatch
 	if (!token) {
 		const isSecure = cookie.name.startsWith("__Secure-");
 		const insecureCookieName = cookie.name.replace("__Secure-", "");

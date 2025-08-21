@@ -1,5 +1,5 @@
 import { useLocation } from "@solidjs/router";
-import { type Component, JSX, Show, createSignal } from "solid-js";
+import { type Component, type JSX, Show, createSignal } from "solid-js";
 import { A } from "@solidjs/router";
 import styles from "./modules/Navbar.module.css";
 
@@ -51,7 +51,6 @@ const NavBar: Component = () => {
 			</Show>
 			{/* Sidebar (mobile) */}
 			<aside
-				// class={`${styles.aside_container} ${open() ? styles.open : ""}`}
 				class={styles.aside_container}
 				onClick={() => setOpen(false)}
 				classList={{

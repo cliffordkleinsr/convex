@@ -15,7 +15,7 @@ export const ConvexContext: Context<ConvexClient | undefined> = createContext();
 // Create a reactive SolidJS atom attached to a Convex query function.
 export function createQuery<T>(
 	query: FunctionReference<"query">,
-	args?: () => {}, // 👈 accept an accessor instead of plain object
+	args?: () => Record<string, unknown>, // args accepts an accessor instead of plain object for reactivity changes
 ): () => T | undefined {
 	const convex = useContext(ConvexContext);
 	if (convex === undefined) {
@@ -37,7 +37,7 @@ export function createQuery<T>(
 
 export function createMutation<T>(
 	mutation: FunctionReference<"mutation">,
-): (args?: {}) => Promise<T> {
+): (args?: Record<string, unknown>) => Promise<T> {
 	const convex = useContext(ConvexContext);
 	if (convex === undefined) {
 		throw "No convex context";
@@ -51,7 +51,7 @@ export function createMutation<T>(
 
 export function createAction<T>(
 	action: FunctionReference<"action">,
-): (args?: {}) => Promise<T> {
+): (args?: Record<string, unknown>) => Promise<T> {
 	const convex = useContext(ConvexContext);
 	if (convex === undefined) {
 		throw "No convex context";

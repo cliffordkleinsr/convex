@@ -9,6 +9,7 @@ type Messeges = {
 	_id: string;
 	user: string;
 	body: string;
+	_creationTime: Date;
 };
 export default function Home() {
 	const [name, setName] = createSignal("");
@@ -18,7 +19,7 @@ export default function Home() {
 	const [expanded, setExpanded] = createSignal(false);
 	const [searchText, setSearchText] = createSignal("");
 	// use a memo to recompute the query args
-	const searchResults = createQuery<any>(api.chat.searchResults, () => ({
+	const searchResults = createQuery<Messeges[]>(api.chat.searchResults, () => ({
 		query: searchText(),
 	}));
 

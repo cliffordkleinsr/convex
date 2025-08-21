@@ -63,10 +63,6 @@
 				z-index: 10;
 				border: 1px solid oklab(from rgb(113, 113, 114) l a b);
 			}
-			&:disabled {
-				opacity: 0.5;
-				pointer-events: none;
-			}
 			&::file-selector-button {
 				background: var(--default-color);
 				margin-inline-end: 16px;
@@ -97,11 +93,10 @@
 			&:focus {
 				outline: hidden;
 			}
-
-			&:disabled {
-				opacity: 0.5;
-				pointer-events: none;
-			}
+		}
+		&:disabled {
+			opacity: 0.5;
+			pointer-events: none;
 		}
 	}
 }
@@ -131,7 +126,7 @@
 			border-radius: 0.5rem;
 		}
 
-		form {
+		> form {
 			position: absolute;
 			top: 0;
 			right: 7%;

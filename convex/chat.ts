@@ -30,7 +30,7 @@ export const sendMessage = mutation({
 
 export const getMessages = query({
 	args: {},
-	handler: async (ctx, args) => {
+	handler: async (ctx) => {
 		// Get most recent messages first
 		const messages = await ctx.db.query("messages").order("desc").take(50);
 		// Reverse the list so that it's in a chronological order.
@@ -76,7 +76,7 @@ export const generateUploadUrl = mutation({
 
 export const fetchGallery = query({
 	args: {},
-	handler: async (ctx, args) => {
+	handler: async (ctx) => {
 		const gallery = await ctx.db.query("gallery").order("desc").collect();
 		return Promise.all(
 			gallery

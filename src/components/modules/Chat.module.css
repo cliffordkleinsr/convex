@@ -188,7 +188,6 @@ button {
 .chat article p {
 	color: var(--secondary-text);
 	background-color: var(--bubbles-background);
-	margin-bottom: 1em;
 	padding: 20px;
 	margin: 0.5em 0;
 	border-radius: 16px;
@@ -250,7 +249,6 @@ button {
 .chat input {
 	color: #111827;
 	width: 100%;
-	border: 0;
 	background: transparent;
 	font-size: 18px;
 	padding-left: 20px;
