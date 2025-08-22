@@ -104,6 +104,7 @@ export default function Home() {
 				class={styles.search}
 				classList={{ [styles.expanded]: expanded() }}
 				onClick={() => setExpanded(!expanded())}
+				tabIndex={-1}
 			>
 				<h2>Search Messages</h2>
 				<input

@@ -4,9 +4,9 @@
 	justify-content: center;
 	flex-direction: column;
 	padding: 3ch 1.1rem;
-	margin: 6ch 0.4rem;
-	max-width: 45ch;
-	border: 1px solid oklab(from rgb(143, 143, 143) l a b);
+	margin: 6ch auto;
+	max-width: 44ch;
+	border: 0.4px solid oklab(from rgb(128, 126, 126) l a b);
 	border-radius: 10px;
 	> p {
 		font-weight: 400;
@@ -32,12 +32,12 @@
 		}
 	}
 	> header {
-		> h1 {
+		h1 {
 			font-style: normal;
 			font-weight: 700;
 			font-size: x-large;
 		}
-		> p {
+		p {
 			font-weight: 300;
 			font-size: small;
 			font-style: oblique;
@@ -104,8 +104,8 @@
 .images {
 	display: grid;
 	grid-template-columns: repeat(3, minmax(0, 1fr));
-	/* justify-items: center; */
-	max-width: 60ch;
+	justify-items: center;
+	max-width: 40ch;
 	margin: 0 auto;
 	/* border: 1px dashed red; */
 	gap: 8px;
@@ -120,12 +120,16 @@
 		position: relative;
 
 		img {
-			height: 160px;
-			width: 160px;
+			height: 110px;
+			width: 110px;
 			object-fit: cover;
 			border-radius: 0.5rem;
 		}
-
+		a {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+		}
 		> form {
 			position: absolute;
 			top: 0;
@@ -153,5 +157,16 @@
 @media (min-width: 450px) {
 	.container {
 		margin: 6ch auto;
+	}
+
+	.images {
+		max-width: 60ch;
+
+		div {
+			img {
+				height: 160px;
+				width: 160px;
+			}
+		}
 	}
 }

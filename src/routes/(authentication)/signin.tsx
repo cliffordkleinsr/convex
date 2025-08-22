@@ -33,7 +33,6 @@ export default function SignIn() {
 				{
 					//callbacks
 					onError: (ctx) => {
-						// window.alert(ctx.error.message);
 						toast.error(ctx.error.message);
 					},
 					onSuccess: () => {
