@@ -7,15 +7,13 @@ import type { GenericCtx } from "../../convex/_generated/server";
 // You'll want to replace this with an environment variable
 const siteUrl = process.env.SITE_URL;
 
-if (!siteUrl)  throw new Error("site url is  not configured!");
-
 export const createAuth = (ctx: GenericCtx) =>
 	// Configure your Better Auth instance here
 	betterAuth({
 		// All auth requests will be proxied through your TanStack Start server
 		baseURL: siteUrl,
 		database: convexAdapter(ctx, betterAuthComponent),
-		trustedOrigins: [siteUrl],
+		trustedOrigins: ["http://localhost:3000", "https://convex.cliff.co.ke"],
 		// Simple non-verified email/password to get started
 		emailAndPassword: {
 			enabled: true,
