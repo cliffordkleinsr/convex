@@ -20,6 +20,11 @@ export const createAuth = (ctx: GenericCtx) =>
 			autoSignIn: false,
 			requireEmailVerification: false,
 		},
+		user: {
+			deleteUser: {
+				enabled: true,
+			},
+		},
 		plugins: [
 			// The Convex plugin is required
 			convex(),
