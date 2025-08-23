@@ -62,6 +62,7 @@ export default function Dash() {
 			<pre>Is Authenticated: {JSON.stringify(authed(), null, 2)}</pre>
 			<pre>Server based Session: {JSON.stringify(session(), null, 2)}</pre>
 			<button onClick={signOutAction}>logout</button>
+			<br />
 			<button onClick={deleteAction}>Delete My Account</button>
 		</>
 	);
