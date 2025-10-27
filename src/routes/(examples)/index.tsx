@@ -67,6 +67,7 @@ export default function Home() {
 				<Index each={messages()}>
 					{(message) => (
 						<article
+							id={`msg-${message()._id}`}
 							classList={{
 								[styles.message_mine]: message().user === name(),
 							}}
@@ -104,7 +105,6 @@ export default function Home() {
 				class={styles.search}
 				classList={{ [styles.expanded]: expanded() }}
 				onClick={() => setExpanded(!expanded())}
-				tabIndex={-1}
 			>
 				<h2>Search Messages</h2>
 				<input
@@ -116,7 +116,17 @@ export default function Home() {
 				<ul>
 					<For each={searchResults()}>
 						{(searchResult) => (
-							<li>
+							<li onClick={() => {
+								const target = document.getElementById(`msg-${searchResult._id}`);
+								 if (target) {
+									target.scrollIntoView({
+										behavior: "smooth",
+										block: "center",
+									});
+									target.classList.add(styles.highlight);
+									setTimeout(() => target.classList.remove(styles.highlight), 1500);
+								}
+							}}>
 								<span>{searchResult.user}:</span>
 								<span class={styles.text_wrapper}>{searchResult.body}</span>
 								<span>

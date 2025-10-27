@@ -435,6 +435,11 @@ article button span {
 	}
 }
 
+.highlight {
+  background-color: #5b5f64;
+  transition: background-color 1s ease-in-out;
+}
+
 .search.expanded {
 	height: 220px; /* expand on tap */
 	overflow-y: auto;
